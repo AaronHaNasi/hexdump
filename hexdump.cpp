@@ -13,7 +13,7 @@ int main( int argc, char* argv[] ) {
 	bool offsetSet = false;
 	int addOffset;
 //	string contents; 	
-	unsigned int* fileContents; 
+	int* fileContents; 
 	bool oneByteOctal = false; 
 	bool cannonical = false; 
 	bool skip = false; 
@@ -61,15 +61,19 @@ int main( int argc, char* argv[] ) {
 			off_t fileLength = lseek(fd, offset, SEEK_END); // get file size 
 			lseek(fd, offset, SEEK_SET); // reset file position
 			// fileContents = (char*)calloc(fileLength,sizeof(char)); 
-			fileContents = (unsigned int*)calloc(fileLength, sizeof(unsigned int)); 
+			fileContents = (int*)calloc(fileLength, sizeof(int)); 
 			// TODO figure out how to allocate fileContents properly 
 			sz = read(fd, fileContents, fileLength); // read from file into fileContents
+			toString(fileContents, oneByteOctal, cannonical, skip); 
+			
+		/*	
 			for( size_t j = 0; j < fileLength; j++ ) { 
 				printf("%x", fileContents[j]); 
-			}
+			}*/
 		}
 		
     	}	
+	free(fileContents); 
 	return 0; 
 }
 
@@ -77,6 +81,7 @@ int main( int argc, char* argv[] ) {
 	return "success";	
 }	
 */
-void toString(char* contents, bool oneByteOctal, bool cannonical, bool skip) {
-	printf("success!"); 
+void toString(int* contents, bool oneByteOctal, bool cannonical, bool skip) {
+	// printf("success!"); 
+	char * rString = (char*)calloc()
 }
