@@ -7,13 +7,35 @@
 #define GROUP_PER_LINE 8 
 // system calls to be used: open, read, and close 
 
+void toString(char* contents, bool oneByteOctal, bool cannonical, bool skip, int fileLength) {
+	int offset = 0x0000000;
+		
+	int counter = 0; 
+	for ( size_t i = 0; i < fileLength; i++ ) {
+		if ( counter == 0 ) {
+			printf("%07x %02x", offset, contents[i]);
+		       	counter++; 	
+		} else if ( counter % 2 == 0 && counter != 15) {
+			printf("%02x", contents[i]); 
+			counter++;
+		} else if ( counter % 2 == 1 && counter != 15) { 
+			printf("%02x ", contents[i]); 
+			counter++; 
+		} else if ( counter == 15 ) {
+			printf("%02x\n", contents[i]);
+			counter = 0;
+		       	offset += 16;	
+		}	
+	}
+}
+
 int main( int argc, char* argv[] ) {
 	int offset = 0;
 	int* offsetP = NULL; 
 	bool offsetSet = false;
 	int addOffset;
 //	string contents; 	
-	int* fileContents; 
+	char* fileContents; 
 	bool oneByteOctal = false; 
 	bool cannonical = false; 
 	bool skip = false; 
@@ -61,10 +83,12 @@ int main( int argc, char* argv[] ) {
 			off_t fileLength = lseek(fd, offset, SEEK_END); // get file size 
 			lseek(fd, offset, SEEK_SET); // reset file position
 			// fileContents = (char*)calloc(fileLength,sizeof(char)); 
-			fileContents = (int*)calloc(fileLength, sizeof(int)); 
+			fileContents = (char*)calloc(fileLength, sizeof(char)); 
 			// TODO figure out how to allocate fileContents properly 
-			sz = read(fd, fileContents, fileLength); // read from file into fileContents
-			toString(fileContents, oneByteOctal, cannonical, skip); 
+			sz = read(fd, fileContents, fileLength); // read from file into fileContents	
+			close(fd);
+		//       	printf("%s", fileContents); 	
+			toString(fileContents, oneByteOctal, cannonical, skip, fileLength); 
 			
 		/*	
 			for( size_t j = 0; j < fileLength; j++ ) { 
@@ -81,7 +105,4 @@ int main( int argc, char* argv[] ) {
 	return "success";	
 }	
 */
-void toString(int* contents, bool oneByteOctal, bool cannonical, bool skip) {
-	// printf("success!"); 
-	char * rString = (char*)calloc()
-}
+
